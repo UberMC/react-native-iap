@@ -23,7 +23,9 @@ def DEFAULT_COMPILE_SDK_VERSION = 30
 def DEFAULT_BUILD_TOOLS_VERSION = "30.0.2"
 def DEFAULT_MIN_SDK_VERSION = 16
 def DEFAULT_TARGET_SDK_VERSION = 30
-def DEFAULT_PLAY_SERVICES_VERSION = "17.6.0"
+def playServicesVersion = getExtOrDefault("playServicesVersion")
+def playBillingSdkVersion = getExtOrDefault("playBillingSdkVersion")
+
 
 android {
   compileSdkVersion safeExtGet("compileSdkVersion", DEFAULT_COMPILE_SDK_VERSION)
@@ -60,8 +62,7 @@ repositories {
 
 dependencies {
   implementation 'com.facebook.react:react-native:+'
-  playImplementation 'com.android.billingclient:billing:4.0.0'
-  def playServicesVersion = safeExtGet('playServicesVersion', DEFAULT_PLAY_SERVICES_VERSION)
+  playImplementation "com.android.billingclient:billing-ktx:$playBillingSdkVersion"
   playImplementation "com.google.android.gms:play-services-base:$playServicesVersion"
   amazonImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
