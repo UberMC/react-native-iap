@@ -437,7 +437,7 @@ public class RNIapModule extends ReactContextBaseJavaModule implements Purchases
               BillingFlowParams.SubscriptionUpdateParams.newBuilder();
 
           if (purchaseToken != null) {
-            subscriptionUpdateParamsBuilder.setOldSkuPurchaseToken(purchaseToken);
+            //subscriptionUpdateParamsBuilder.setOldSkuPurchaseToken(purchaseToken);
           }
 
           if (obfuscatedAccountId != null) {
@@ -448,44 +448,7 @@ public class RNIapModule extends ReactContextBaseJavaModule implements Purchases
             builder.setObfuscatedProfileId(obfuscatedProfileId);
           }
 
-          if (prorationMode != null && prorationMode != -1) {
-            if (prorationMode
-                == BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_PRORATED_PRICE) {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_PRORATED_PRICE);
-              if (!type.equals(BillingClient.SkuType.SUBS)) {
-                String debugMessage =
-                    "IMMEDIATE_AND_CHARGE_PRORATED_PRICE for proration mode only works in"
-                        + " subscription purchase.";
-                WritableMap error = Arguments.createMap();
-                error.putString("debugMessage", debugMessage);
-                error.putString("code", PROMISE_BUY_ITEM);
-                error.putString("message", debugMessage);
-                error.putString("productId", sku);
-                sendEvent(reactContext, "purchase-error", error);
-                promise.reject(PROMISE_BUY_ITEM, debugMessage);
-                return;
-              }
-            } else if (prorationMode
-                == BillingFlowParams.ProrationMode.IMMEDIATE_WITHOUT_PRORATION) {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.IMMEDIATE_WITHOUT_PRORATION);
-            } else if (prorationMode == BillingFlowParams.ProrationMode.DEFERRED) {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.DEFERRED);
-            } else if (prorationMode
-                == BillingFlowParams.ProrationMode.IMMEDIATE_WITH_TIME_PRORATION) {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.IMMEDIATE_WITHOUT_PRORATION);
-            } else if (prorationMode
-                == BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_FULL_PRICE) {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_FULL_PRICE);
-            } else {
-              subscriptionUpdateParamsBuilder.setReplaceSkusProrationMode(
-                  BillingFlowParams.ProrationMode.UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY);
-            }
-          }
+          // Note: prorationMode parameter is accepted but ignored
 
           if (purchaseToken != null) {
             BillingFlowParams.SubscriptionUpdateParams subscriptionUpdateParams =
